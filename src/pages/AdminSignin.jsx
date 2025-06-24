@@ -16,7 +16,6 @@ export default function AdminSignin() {
               `${USERS_API}?email=${email}&password=${password}`
             );
             const users = res.data;
-      
             if (users.length > 0) {
               const user = users[0];
       
