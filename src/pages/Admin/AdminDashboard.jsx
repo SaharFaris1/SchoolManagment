@@ -18,9 +18,9 @@ function AdminDashboard() {
           .then(setLeaves);
       }, []);
 
-      const accepted = projects.filter((p) => p.status === "accepted");
-  const rejected = projects.filter((p) => p.status === "rejected");
-  const pending = projects.filter((p) => p.status === "pending");
+      const accepted = leaves.filter((p) => p.status === "accepted");
+  const rejected = leaves.filter((p) => p.status === "rejected");
+  const pending = leaves.filter((p) => p.status === "pending");
   return (
     <div>AdminDashboard</div>
   )
