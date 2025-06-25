@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-// import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 const USERS_API = "https://685a896b9f6ef9611156cfd9.mockapi.io/Users";
 export default function Signin() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
     const handleLogin = async () => {
         if (!email || !password) {
           return Swal.fire("Error", "  All Fields Requireds", "error");
@@ -28,18 +29,17 @@ export default function Signin() {
                 showConfirmButton: false,
               });
       
-              setTimeout(() => {
-                const user = JSON.parse(localStorage.getItem("user"));
-      
-                if (user?.email === "admin@gmail.com" && user?.password === "admin123") {
-                  navigate("/admin/dashboard");
-                } else if (user?.role === "teacher") {
-                //   navigate("/teacher");
-                } else {
-                //   navigate("/student");
-                }
-              }, 1500);
-            } else {
+             
+  setTimeout(() => {
+    if (user.role === "admin") {
+      navigate("/admin/dashboard");
+    } else if (user.role === "teacher") {
+      navigate("/teacher/class");
+    } else if (user.role === "student") {
+      navigate("/student/attendance");
+    }
+  }, 1500);
+} else {
               Swal.fire("Error", "البريد أو كلمة المرور غير صحيحة", "error");
             }
           } catch {
@@ -49,13 +49,21 @@ export default function Signin() {
   return (
     <>
     <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
-        <h2 className="text-2xl font-bold  mb-6 text-center">
-    Login
+      <div className="max-w-md w-full bg-white  rounded-xl shadow-lg p-8">
+         <div className="flex flex-col items-center ">
+          <img
+          src="https://5.imimg.com/data5/RX/NO/MY-24297425/eacademics-school-28complete-school-management-software-with-mobile-app-29.png"
+          alt="School Management Logo"
+          className="h-30 w-30"
+        />
+        <h2 className="text-2xl font-bold text-sky-900 mb-6 text-center">
+    Welcome Bakc!
+    
         </h2>
+        </div>
         <div className="space-y-4">
           <div>
-            <label className="block  font-medium text-gray-700 mb-1">
+            <label className="block  font-medium text-sky-900 mb-1">
               Email
             </label>
             <input
@@ -68,7 +76,7 @@ export default function Signin() {
           </div>
 
           <div>
-            <label className="block  font-medium text-gray-700 mb-1">
+            <label className="block text-sky-900 font-medium mb-1">
               Password
             </label>
             <input
@@ -84,7 +92,7 @@ export default function Signin() {
             onClick={handleLogin}
             className="w-full  bg-sky-900   hover:bg-sky-700 text-white font-medium py-2 rounded-lg transition-colors"
           >
-   Login
+Sign in
           </button>
         </div>
 

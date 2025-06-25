@@ -15,17 +15,17 @@ export default function HomeScreen() {
     <div className="min-h-screen overflow-hidden bg-gradient-to-br from-gray-50 to-sky-100 flex flex-col">
 
       <div className="flex justify-center py-10">
-        <img
-          src=""
+        {/* <img
+          src="https://5.imimg.com/data5/RX/NO/MY-24297425/eacademics-school-28complete-school-management-software-with-mobile-app-29.png"
           alt="School Management Logo"
-          className=""
-        />
+          className="h-50"
+        /> */}
       </div>
 
  
       <div className="flex-grow flex items-center justify-center z-10 px-4">
-        <div className="text-center max-w-xl">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold drop-shadow-xs text-sky-900">
+        <div className="text-center max-w-2xl">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold drop-shadow-xs text-sky-900">
             School Management System
           </h1>
           <p className="mt-4 text-base sm:text-lg md:text-xl text-sky-900">
