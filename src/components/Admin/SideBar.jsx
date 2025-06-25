@@ -13,13 +13,11 @@ import {
 export default function AdminSideBar({ sidebarOpen, setSidebarOpen }) {
   const navigate = useNavigate();
 
-  // دالة الإضافة ← إعادة التوجيه إلى صفحة Add Student أو Teacher
   const handleAddUser = (role) => {
     navigate(`/admin/add-${role}`);
     setSidebarOpen(false);
   };
 
-  // دالة تسجيل الخروج ← مع SweetAlert2
   const handleLogout = () => {
     Swal.fire({
       title: "Are you sure?",
@@ -45,36 +43,36 @@ export default function AdminSideBar({ sidebarOpen, setSidebarOpen }) {
 
   return (
     <>
-      {/* زر الفتح ← فقط على الجوال */}
-      <div className="md:hidden fixed top-4 left-4 z-40">
+      {/* زر القائمة ← فقط على الجوال */}
+      <div className="md:hidden fixed top-4 left-4 z-50">
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="bg-indigo-700 text-white p-2 rounded-md shadow-md hover:bg-indigo-800 transition"
+          className="bg-indigo-700 text-white p-2 rounded-md shadow-md hover:bg-indigo-800 transition duration-300"
+          aria-label="Toggle Sidebar"
         >
           {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
 
-      {/* الشريط الجانبي ← يظهر دائمًا على الشاشات الكبيرة */}
+      {/* الشريط الجانبي ← ثابت على اليسار */}
       <div
-        className={`fixed inset-y-0 left-0 z-30 md:relative md:translate-x-0 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed md:static md:flex md:w-64 md:h-full h-full w-64 bg-white shadow-xl border-r border-gray-200 flex-col z-40 transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } w-64 bg-white shadow-xl border-r border-gray-200 flex flex-col`}
+        } md:translate-x-0 transition-transform duration-300 ease-in-out`}
       >
-        <div className="p-6 flex flex-col h-full">
+        <div className="p-6 flex flex-col h-full justify-between">
           {/* عنوان الإدارة */}
           <div className="inline-flex items-center gap-3 mb-6">
-            <House color="#076452" />
-            <h2 className="text-xl font-bold text-[#076452]">Admin Panel</h2>
+            <House className="text-black"/>
+            <h2 className="text-xl font-bold ">Admin </h2>
           </div>
 
           <hr className="h-[1px] bg-gray-300 my-4" />
 
           {/* القائمة الجانبية */}
           <nav className="flex flex-col gap-2 flex-grow">
-            {/* الصفحة الرئيسية */}
             <Link
-              to="/admin"
+              to="/admin/dashboard"
               className="inline-flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded"
               onClick={() => setSidebarOpen(false)}
             >
@@ -82,9 +80,17 @@ export default function AdminSideBar({ sidebarOpen, setSidebarOpen }) {
               <span>Home</span>
             </Link>
 
-            {/* إضافة فصل دراسي */}
             <Link
-              to="/admin/addClass"
+              to="/admin/add-principle"
+              className="inline-flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded"
+              onClick={() => setSidebarOpen(false)}
+            >
+              <UserPlus size={16} />
+              <span>Add Principle</span>
+            </Link>
+
+            <Link
+              to="/admin/add-class"
               className="inline-flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded"
               onClick={() => setSidebarOpen(false)}
             >
@@ -92,7 +98,6 @@ export default function AdminSideBar({ sidebarOpen, setSidebarOpen }) {
               <span>Add Class</span>
             </Link>
 
-            {/* إضافة طالب */}
             <button
               onClick={() => handleAddUser("student")}
               className="inline-flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded"
@@ -101,7 +106,6 @@ export default function AdminSideBar({ sidebarOpen, setSidebarOpen }) {
               <span>Add Student</span>
             </button>
 
-            {/* إضافة معلم */}
             <button
               onClick={() => handleAddUser("teacher")}
               className="inline-flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded"
@@ -112,22 +116,21 @@ export default function AdminSideBar({ sidebarOpen, setSidebarOpen }) {
 
             <hr className="h-[1px] bg-gray-300 my-4" />
 
-            {/* تسجيل الخروج */}
             <button
               onClick={handleLogout}
               className="inline-flex items-center gap-3 px-3 py-2 mt-auto hover:bg-red-100 rounded text-red-600"
             >
               <LogOut size={16} color="#e53e3e" />
-              <span>Sign Out</span>
+              <span>Logout</span>
             </button>
           </nav>
         </div>
       </div>
 
-      {/* الطبقة الخارجية ← عند فتح الشريط على الجوال */}
+  
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-30 z-20 md:hidden"
+          className="fixed inset-0 bg-black bg-opacity-30 z-30 md:hidden"
           onClick={() => setSidebarOpen(false)}
         ></div>
       )}

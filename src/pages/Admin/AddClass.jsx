@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
-
+import AdminSideBar from "../../components/Admin/SideBar";
 function AddClass() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -10,6 +10,7 @@ function AddClass() {
   const [dateEndAt, setDateEndAt] = useState("");
   const [timeStartAt, setTimeStartAt] = useState("");
   const [timeEndAt, setTimeEndAt] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -71,6 +72,9 @@ function AddClass() {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
+        <div className="hidden md:block w-64 h-screen sticky top-0 left-0">
+      <AdminSideBar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      </div>
       <div className="flex-1 flex flex-col justify-center items-center">
         <main className="w-full max-w-lg bg-white rounded-xl shadow-md p-8 m-6">
           <h1 className="text-2xl font-bold mb-4">Add New Class</h1>
@@ -170,7 +174,7 @@ function AddClass() {
      
             <button
               type="submit"
-              className="w-full bg-gray-700 text-white px-4 py-2 rounded-xl hover:bg-blue-800 transition"
+              className="w-full bg-sky-700 text-white px-4 py-2 rounded-xl hover:bg-sky-800 transition"
             >
               Add Class
             </button>
