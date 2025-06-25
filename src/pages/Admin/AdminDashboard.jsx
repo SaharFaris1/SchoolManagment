@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import AdminSideBar from "../../components/Admin/SideBar";
 function AdminDashboard() {
     const [students, setStudents] = useState([]);
     const [teachers, setTeachers] = useState([]);
     const [search, setSearch] = useState("");
-    const [showAll, setShowAll] = useState(false);
     const [leaves, setLeaves] = useState([]);
     useEffect(() => {
         fetch("https://685a896b9f6ef9611156cfd9.mockapi.io/Users")
@@ -18,9 +18,7 @@ function AdminDashboard() {
           .then(setLeaves);
       }, []);
 
-      const accepted = leaves.filter((p) => p.status === "accepted");
-  const rejected = leaves.filter((p) => p.status === "rejected");
-  const pending = leaves.filter((p) => p.status === "pending");
+   
   const handleEditUser = (user) => {
     if (user.role === "teacher") {
       // navigate(`/editteacher/${user.id}`);
@@ -33,7 +31,10 @@ function AdminDashboard() {
 
   return (
     <div className="bg-white rounded-2xl shadow p-3 overflow-auto">
+
       <div className="flex flex-col">
+     <AdminSideBar/>
+   <div>
 <input
                 type="text"
                 placeholder="Searching ..."
@@ -42,6 +43,7 @@ function AdminDashboard() {
                 onChange={(e) => setSearch(e.target.value)}
               />
               <div className="">
+              </div>
               <p className="text-xl py-2 font-semibold mb-4">
 Teachers and Students
 </p>

@@ -8,20 +8,18 @@ import AddTeacher from '../pages/Admin/AddTeacher';
 import AddPrinciple from '../pages/Admin/AddPrinciple';
 import EditStudent from '../pages/Admin/EditStudent';
 import EditTeacher from '../pages/Admin/EditTeacher';
-import AdminSignin from '../pages/Admin/AdminSignin';
 
+import Nav from '../components/Nav';
+import Footer  from '../components/Footer';
+import AdminSideBar from '../components/Admin/SideBar';
+import Signin from '../pages/Signin';
 function Layout() {
   return (
-
       <>
-          <Nav />
           <Outlet />
-          <Footer />
+         
       </>
-
   );
-
-
 }
 const router = createBrowserRouter([
   {
@@ -29,18 +27,22 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { index: true, element: <Home /> },
-      { path: "/dashboard/admin", element: <AdminDashboard /> },
-      { path: "/admin/addStudent", element: <AddStudent /> },
+      { path: "/admin/dashboard", element: <AdminDashboard /> },
+      { path: "/admin/addstudent", element: <AddStudent /> },
       { path: "/admin/addClass", element: <AddClass /> },
-      { path: "/admin/addTeacher", element: <AddTeacher /> },
-      { path: "/admin/addPrinciple", element: <AddPrinciple /> },
+      { path: "/admin/addteacher", element: <AddTeacher /> },
+      { path: "/admin/addprinciple", element: <AddPrinciple /> },
       { path: "/admin/editStudent", element: <EditStudent /> },
       { path: "/admin/editTeacher", element: <EditTeacher /> },
+      { path: "/admin/addclass", element: <AddClass /> },
+    
+     
+
 
   
     ]
   },
-  { path: "/signin/admin", element: <AdminSignin /> },
+  { path: "/signin", element: <Signin /> },
 
  
 ]);

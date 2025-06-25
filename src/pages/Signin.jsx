@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 // import { Link, useNavigate } from "react-router";
 
 const USERS_API = "https://685a896b9f6ef9611156cfd9.mockapi.io/Users";
-export default function AdminSignin() {
+export default function Signin() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const handleLogin = async () => {
@@ -32,7 +32,7 @@ export default function AdminSignin() {
                 const user = JSON.parse(localStorage.getItem("user"));
       
                 if (user?.email === "admin@gmail.com" && user?.password === "admin123") {
-                //   navigate("/admin");
+                  navigate("/admin/dashboard");
                 } else if (user?.role === "teacher") {
                 //   navigate("/teacher");
                 } else {
@@ -82,13 +82,13 @@ export default function AdminSignin() {
 
           <button
             onClick={handleLogin}
-            className="w-full  bg-gray-900   hover:bg-gray-700 text-white font-medium py-2 rounded-lg transition-colors"
+            className="w-full  bg-sky-900   hover:bg-sky-700 text-white font-medium py-2 rounded-lg transition-colors"
           >
    Login
           </button>
         </div>
 
-        <div className="mt-4 text-center text-sm text-gray-600">
+        {/* <div className="mt-4 text-center text-sm text-gray-600">
           Don't have an account?
           {/* <Link
             to="/signup"
@@ -96,7 +96,7 @@ export default function AdminSignin() {
           >
             Sign up
           </Link> */}
-        </div>
+      
       </div>
     </div>
   </>
