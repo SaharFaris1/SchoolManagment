@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+
 function Nav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -37,14 +38,14 @@ function Nav() {
   }
 
   return (
-    <nav className="bg-gray-900 shadow-md">
+    <nav className="bg-gray-50 shadow-md">
       <div className="container mx-auto px-4 py-2">
         <div className="flex justify-between items-center">
 
           {/* Logo */}
           <div className="text-xl  text-white-800 flex items-center gap-2">
             <img src="logo.jpg" alt="Logo" className="w-15 h-15 rounded-full" />
-            <span className='text-white'> GP Managment</span>
+            <span className=''>  School Managment</span>
           </div>
 
           {/* Desktop Right Side Buttons */}
@@ -93,3 +94,4 @@ function Nav() {
     </nav>
   );
 }
+export default Nav

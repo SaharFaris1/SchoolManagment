@@ -51,7 +51,7 @@ const handleSubmit = async (e) => {
       });
 
       setTimeout(() => {
-       // navigate("/admin");
+        navigate("/admin/dashboard")
       }, 1500);
     } else {
       Swal.fire({
