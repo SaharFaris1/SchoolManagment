@@ -35,7 +35,7 @@ function AddStudent() {
           body: JSON.stringify({
             name,
             email,
-            teacherId,
+            classId,
             password,
             role: "student",
           }),

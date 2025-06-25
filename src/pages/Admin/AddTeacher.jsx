@@ -37,6 +37,7 @@ const handleSubmit = async (e) => {
           name,
           email,
           password,
+          classId,
           role: "teacher",
         }),
       }
