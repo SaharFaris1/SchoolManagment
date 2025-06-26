@@ -19,14 +19,44 @@ function AddPrinciple() {
   };
 
   useEffect(() => {
-    fetch("https://attendance-system-express.onrender.com/classes", {
-      headers: headers,
-    })
-      .then((res) => res.json())
-      .then(setClasses)
-      .catch((error) => {
-        console.error("فشل في جلب الفصول", error);
-      });
+    const fetchClasses = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const requestHeaders = {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        };
+
+        const response = await fetch(
+          "https://attendance-system-express.onrender.com/classes",
+          {
+            headers: requestHeaders,
+          }
+        );
+        const data = await response.json();
+        console.log("Classes API response:", data);
+
+        // Handle different response structures
+        const classesArray = Array.isArray(data)
+          ? data
+          : data.data && Array.isArray(data.data)
+          ? data.data
+          : [];
+
+        setClasses(classesArray);
+      } catch (error) {
+        console.error("Failed to fetch classes", error);
+        setClasses([]); // Set empty array on error to prevent map error
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to load classes",
+          confirmButtonText: "Ok",
+        });
+      }
+    };
+
+    fetchClasses();
   }, []);
 
   const handleSubmit = async (e) => {
@@ -137,11 +167,12 @@ function AddPrinciple() {
                 onChange={(e) => setClassId(e.target.value)}
               >
                 <option value=""> Choose class</option>
-                {classes.map((cls) => (
-                  <option key={cls.id} value={cls._id}>
-                    {cls.name}
-                  </option>
-                ))}
+                {Array.isArray(classes) &&
+                  classes.map((cls) => (
+                    <option key={cls.id || cls._id} value={cls._id || cls.id}>
+                      {cls.name}
+                    </option>
+                  ))}
               </select>
             </div>
 
