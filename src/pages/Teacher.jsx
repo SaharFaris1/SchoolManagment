@@ -341,13 +341,13 @@ function Teacher() {
 
       // Use a default class ID since we're focusing on student attendance
       // In a real scenario, this would come from the teacher's assigned class
-      const defaultClassId = "teacher-class-" + currentUser?.id;
+      const defaultClassId = currentUser?.id;
 
       const attendanceRecord = {
         classId: defaultClassId,
         attendeeId: studentId,
         attenderId: currentUser?.id,
-        status: status, // "present" or "absent"
+        status: status,
         date: today,
       };
 
