@@ -43,7 +43,7 @@ export default function AdminSideBar({ sidebarOpen, setSidebarOpen }) {
 
   return (
     <>
-      {/* زر القائمة ← فقط على الجوال */}
+   
       <div className="md:hidden fixed top-4 left-4 z-50">
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -54,14 +54,14 @@ export default function AdminSideBar({ sidebarOpen, setSidebarOpen }) {
         </button>
       </div>
 
-      {/* الشريط الجانبي ← ثابت على اليسار */}
+
       <div
         className={`fixed md:static md:flex md:w-64 md:h-full h-full w-64 bg-white shadow-xl border-r border-gray-200 flex-col z-40 transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 transition-transform duration-300 ease-in-out`}
       >
         <div className="p-6 flex flex-col h-full justify-between">
-          {/* عنوان الإدارة */}
+      
           <div className="inline-flex items-center gap-3 mb-6">
             <House className="text-black"/>
             <h2 className="text-xl font-bold ">Admin </h2>
@@ -69,7 +69,7 @@ export default function AdminSideBar({ sidebarOpen, setSidebarOpen }) {
 
           <hr className="h-[1px] bg-gray-300 my-4" />
 
-          {/* القائمة الجانبية */}
+      
           <nav className="flex flex-col gap-2 flex-grow">
             <Link
               to="/admin/dashboard"
