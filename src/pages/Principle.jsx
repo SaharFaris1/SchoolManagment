@@ -15,6 +15,8 @@ import {
 function Principle() {
   const [leaves, setLeaves] = useState([]);
   const [students, setStudents] = useState([]);
+  const [leavesData, setLeavesData] = useState([]);
+  const [usersData, setUsersData] = useState([]);
   const [filter, setFilter] = useState("all"); // all, pending, approved, rejected
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -28,22 +30,32 @@ function Principle() {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         };
-
-        const [leaveRes, usersRes] = await Promise.all([
-          axios.get("https://attendance-system-express.onrender.com/leave", {
+        await axios
+          .get("https://attendance-system-express.onrender.com/users/users", {
             headers,
-          }),
-          axios.get("https://attendance-system-express.onrender.com/users", {
+          })
+          .then((res) => {
+            console.log(res.data, "userss"), setUsersData(res.data.data);
+          });
+        const leaveDataa = await axios
+          .get("https://attendance-system-express.onrender.com/leave", {
             headers,
-          }),
-        ]);
+          })
+          .then((res) => {
+            console.log(res.data, "leaves");
+            setLeavesData(res.data);
+          });
 
         // Handle different response structures
-        const leaveData = leaveRes.data.data || leaveRes.data || [];
-        const usersData = usersRes.data.data || usersRes.data || [];
+        // const leaveData = leaveRes.data.data || leaveRes.data || [];
+        // const usersData = usersRes.data.data || usersRes.data || [];
 
-        setLeaves(leaveData);
-        setStudents(usersData.filter((user) => user.role === "student"));
+        console.log(leavesData);
+        console.log(usersData, "datauser");
+
+        setStudents(usersData?.filter((user) => user.role == "student"));
+
+        console.log(students, "studentssss");
       } catch (error) {
         console.error("Error fetching data:", error);
         if (error.response?.status === 401) {
@@ -51,7 +63,7 @@ function Principle() {
           localStorage.removeItem("token");
           navigate("/signin");
         } else {
-          Swal.fire("Error", "Failed to load data", "error");
+          Swal.fire("Error", "Failed to load data", error);
         }
       }
     };
@@ -61,14 +73,15 @@ function Principle() {
 
   // Get student name by ID
   const getStudentName = (studentId) => {
-    const student = students.find((s) => s.id === studentId);
-    return student ? student.name : "Unknown Student";
+    const student = students?.find((s) => s.id)?.name;
+    return student ? student : "Unknown Student";
   };
 
   // Handle leave request approval/rejection
   const handleLeaveAction = async (leaveData, action) => {
     setLoading(true);
-
+    console.log(leaveData, "ssasdasdasdas");
+    console.log(action, "action");
     try {
       const token = localStorage.getItem("token");
 
@@ -77,8 +90,18 @@ function Principle() {
         status: action, // "approved" or "rejected"
       };
 
-      await axios.put(
-        `https://attendance-system-express.onrender.com/leave/${leaveData.id}`,
+      const action1 =
+        updateData.status.trim() == "accepted"
+          ? "accept"
+          : updateData.status.trim() == "rejected"
+          ? "reject"
+          : "s";
+
+      console.log(updateData.status, "sssssssl;llas,da,'sd;'sad;");
+      console.log(updateData, " sssssssasfafafpadfadf");
+
+      await axios.patch(
+        `https://attendance-system-express.onrender.com/leave/${leaveData.studentId}/leaves/${leaveData._id}/${action1}`,
         updateData,
         {
           headers: {
@@ -121,7 +144,7 @@ function Principle() {
   };
 
   // Filter leaves based on status
-  const filteredLeaves = leaves.filter((leave) => {
+  const filteredLeaves = leavesData.filter((leave) => {
     if (filter === "all") return true;
     // Handle undefined or null status by treating as "pending"
     const leaveStatus = leave.status || "pending";
@@ -130,15 +153,15 @@ function Principle() {
 
   // Get statistics
   const getStats = () => {
-    const total = leaves.length;
-    const pending = leaves.filter(
-      (l) => (l.status || "pending") === "pending"
+    const total = leavesData.length;
+    const pending = leavesData.filter(
+      (l) => (l.status || "pending") == "Pending"
     ).length;
-    const approved = leaves.filter(
-      (l) => (l.status || "pending") === "approved"
+    const approved = leavesData.filter(
+      (l) => (l.status || "accepted") == "accepted"
     ).length;
-    const rejected = leaves.filter(
-      (l) => (l.status || "pending") === "rejected"
+    const rejected = leavesData.filter(
+      (l) => (l.status || "rejected") == "rejected"
     ).length;
 
     return { total, pending, approved, rejected };
@@ -188,10 +211,6 @@ function Principle() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 text-gray-600">
-                <FaCalendarAlt />
-                <span>{new Date().toLocaleDateString()}</span>
-              </div>
               <button
                 onClick={handleLogout}
                 className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
@@ -266,7 +285,7 @@ function Principle() {
 
               {/* Filter Buttons */}
               <div className="flex space-x-2">
-                {["all", "pending", "approved", "rejected"].map((status) => (
+                {["all", "Pending", "accepted", "rejected"].map((status) => (
                   <button
                     key={status}
                     onClick={() => setFilter(status)}
@@ -284,7 +303,7 @@ function Principle() {
                         (
                         {status === "pending"
                           ? stats.pending
-                          : status === "approved"
+                          : status === "accepted"
                           ? stats.approved
                           : stats.rejected}
                         )
@@ -349,7 +368,7 @@ function Principle() {
                               Date of Absence:
                             </p>
                             <p className="text-gray-900">
-                              {new Date(leave.date).toLocaleDateString()}
+                              {new Date(leave.leavedAt).toLocaleDateString()}
                             </p>
                           </div>
                           <div>
@@ -367,7 +386,7 @@ function Principle() {
                             Reason:
                           </p>
                           <div className="bg-gray-50 p-4 rounded border">
-                            <p className="text-gray-900">{leave.reason}</p>
+                            <p className="text-gray-900">{leave.leaveReason}</p>
                           </div>
                         </div>
 
@@ -379,10 +398,10 @@ function Principle() {
                         )}
                       </div>
 
-                      {(leave.status === "pending" || !leave.status) && (
+                      {(leave.status === "Pending" || !leave.status) && (
                         <div className="flex space-x-2 ml-4">
                           <button
-                            onClick={() => handleLeaveAction(leave, "approved")}
+                            onClick={() => handleLeaveAction(leave, "accepted")}
                             disabled={loading}
                             className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-1"
                           >

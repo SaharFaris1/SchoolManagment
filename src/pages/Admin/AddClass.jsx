@@ -12,10 +12,26 @@ function AddClass() {
   const [timeEndAt, setTimeEndAt] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const token = localStorage.getItem("token");
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!name.trim() || !location.trim() || !capacity.trim() || !description.trim()  || !dateStartAt.trim()  || !dateEndAt.trim()  || !timeStartAt.trim()  || !timeEndAt.trim()) {
+    if (
+      !name.trim() ||
+      !location.trim() ||
+      !capacity.trim() ||
+      !description.trim() ||
+      !dateStartAt.trim() ||
+      !dateEndAt.trim() ||
+      !timeStartAt.trim() ||
+      !timeEndAt.trim()
+    ) {
       return Swal.fire({
         icon: "warning",
         title: "All Fields Required",
@@ -25,10 +41,10 @@ function AddClass() {
 
     try {
       const response = await fetch(
-        "https://685a896b9f6ef9611156cfd9.mockapi.io/Class", 
+        "https://attendance-system-express.onrender.com/classes/create",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: headers,
           body: JSON.stringify({
             name,
             description,
@@ -50,9 +66,7 @@ function AddClass() {
           timer: 1500,
         });
 
-        setTimeout(() => {
-       
-        }, 1500);
+        setTimeout(() => {}, 1500);
       } else {
         Swal.fire({
           icon: "error",
@@ -72,14 +86,16 @@ function AddClass() {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-        <div className="hidden md:block w-64 h-screen sticky top-0 left-0">
-      <AdminSideBar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <div className="hidden md:block w-64 h-screen sticky top-0 left-0">
+        <AdminSideBar
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
+        />
       </div>
       <div className="flex-1 flex flex-col justify-center items-center">
         <main className="w-full max-w-lg bg-white rounded-xl shadow-md p-8 m-6">
           <h1 className="text-2xl font-bold mb-4">Add New Class</h1>
           <form onSubmit={handleSubmit} className="space-y-4">
-          
             <div>
               <label className="block font-semibold mb-2">Class Name</label>
               <input
@@ -91,7 +107,6 @@ function AddClass() {
               />
             </div>
 
-         
             <div>
               <label className="block font-semibold mb-2">Description</label>
               <input
@@ -103,7 +118,6 @@ function AddClass() {
               />
             </div>
 
-         
             <div>
               <label className="block font-semibold mb-2">Location</label>
               <input
@@ -115,7 +129,6 @@ function AddClass() {
               />
             </div>
 
-       
             <div>
               <label className="block font-semibold mb-2">Capacity</label>
               <input
@@ -127,7 +140,6 @@ function AddClass() {
               />
             </div>
 
-        
             <div>
               <label className="block font-semibold mb-2">Start Date</label>
               <input
@@ -138,7 +150,6 @@ function AddClass() {
               />
             </div>
 
-       
             <div>
               <label className="block font-semibold mb-2">End Date</label>
               <input
@@ -149,7 +160,6 @@ function AddClass() {
               />
             </div>
 
-    
             <div>
               <label className="block font-semibold mb-2">Start Time</label>
               <input
@@ -160,7 +170,6 @@ function AddClass() {
               />
             </div>
 
-        
             <div>
               <label className="block font-semibold mb-2">End Time</label>
               <input
@@ -171,7 +180,6 @@ function AddClass() {
               />
             </div>
 
-     
             <button
               type="submit"
               className="w-full bg-sky-700 text-white px-4 py-2 rounded-xl hover:bg-sky-800 transition"

@@ -11,14 +11,15 @@ import EditTeacher from "../pages/Admin/EditTeacher";
 import Signin from "../pages/Signin";
 import EditPrinciple from "../pages/Admin/EditPrinciple";
 import Teacher from "../pages/Teacher";
-import TeacherTest from "../pages/TeacherTest";
 import Student from "../pages/Student";
 import Principle from "../pages/Principle";
+import ErrorBoundary from "../components/ErrorBoundary";
+
 function Layout() {
   return (
-    <>
+    <ErrorBoundary>
       <Outlet />
-    </>
+    </ErrorBoundary>
   );
 }
 const router = createBrowserRouter([

@@ -1,35 +1,103 @@
 import React, { useEffect, useState } from "react";
-import { FaUserGraduate, FaChalkboardTeacher, FaUserTie, FaSchool } from "react-icons/fa";
+import {
+  FaUserGraduate,
+  FaChalkboardTeacher,
+  FaUserTie,
+  FaSchool,
+} from "react-icons/fa";
 
 function DashboardStats() {
   const [users, setUsers] = useState([]);
   const [classes, setClasses] = useState([]);
-  const [classStudents, setClassStudents] = useState([]);
-  const [classTeachers, setClassTeachers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Fetch data 
+  // Fetch data
   useEffect(() => {
-    fetch("https://685a896b9f6ef9611156cfd9.mockapi.io/Users") 
-      .then((res) => res.json())
-      .then(setUsers);
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-    fetch("https://685a896b9f6ef9611156cfd9.mockapi.io/Class") 
-      .then((res) => res.json())
-      .then(setClasses);
+        // Fetch users
+        const usersResponse = await fetch(
+          "https://attendance-system-express.onrender.com/users/users"
+        );
+        const usersData = await usersResponse.json();
+        console.log("Users API response:", usersData);
 
-    fetch("https://685bc72989952852c2daf0c8.mockapi.io/CalssStudents") 
-      .then((res) => res.json())
-      .then(setClassStudents);
+        // Handle different response structures
+        const usersArray = Array.isArray(usersData)
+          ? usersData
+          : usersData.data && Array.isArray(usersData.data)
+          ? usersData.data
+          : [];
+        setUsers(usersArray);
 
-    fetch("https://685bc72989952852c2daf0c8.mockapi.io/ClassTeacher") 
-      .then((res) => res.json())
-      .then(setClassTeachers);
+        // Fetch classes
+        const classesResponse = await fetch(
+          "https://attendance-system-express.onrender.com/classes"
+        );
+        const classesData = await classesResponse.json();
+        console.log("Classes API response:", classesData);
+
+        // Handle different response structures
+        const classesArray = Array.isArray(classesData)
+          ? classesData
+          : classesData.data && Array.isArray(classesData.data)
+          ? classesData.data
+          : [];
+        setClasses(classesArray);
+      } catch (err) {
+        console.error("Error fetching dashboard data:", err);
+        setError("Failed to load dashboard data");
+        setUsers([]);
+        setClasses([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  // Roles
-  const students = users.filter((u) => u.role === "student");
-  const teachers = users.filter((u) => u.role === "teacher");
-  const principals = users.filter((u) => u.role === "principle");
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 p-4">
+        {[1, 2, 3, 4].map((i) => (
+          <div
+            key={i}
+            className="bg-gray-100 shadow rounded-lg p-4 animate-pulse"
+          >
+            <div className="h-4 bg-gray-200 rounded mb-2"></div>
+            <div className="h-8 bg-gray-200 rounded"></div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 p-4">
+        <div className="col-span-full bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          <strong className="font-bold">Error!</strong>
+          <span className="block sm:inline"> {error}</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Ensure users is an array before filtering
+  const usersArray = Array.isArray(users) ? users : [];
+  const classesArray = Array.isArray(classes) ? classes : [];
+
+  // Roles - with safe filtering
+  const students = usersArray.filter((u) => u && u.role === "student");
+  const teachers = usersArray.filter((u) => u && u.role === "teacher");
+  const principals = usersArray.filter((u) => u && u.role === "principle");
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 p-4">
@@ -64,7 +132,9 @@ function DashboardStats() {
       <div className="bg-purple-100 text-purple-700 shadow rounded-lg p-4 flex items-center justify-between hover:shadow-md transition-shadow">
         <div>
           <h3 className="text-lg font-semibold text-gray-700"> Classes</h3>
-          <span className="text-2xl text-purple-500">{classes.length}</span>
+          <span className="text-2xl text-purple-500">
+            {classesArray.length}
+          </span>
         </div>
         <FaSchool size={32} color="#9D3CFF" />
       </div>
